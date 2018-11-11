@@ -62,7 +62,7 @@ export const logIn = () => async (dispatch, getState) => {
 
   try {
 
-    if (getState().currentUser !== null) {
+    if (getState().currentUser) {
       await firebase.auth().signOut();
       await LoginManager.logOut();
     }

@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import AccountDetails from './AccountDetails/index'
 import Login from './Login/index'
-import * as LoginActions from "../../app/Account/actions";
+import {logIn} from "../../app/Account/actions";
 
 class Account extends Component {
     static LOGIN_METHOD_FACEBOOK = "LOGIN_METHOD_FACEBOOK";
@@ -15,34 +15,22 @@ class Account extends Component {
 
     static propTypes = {
         onUserLoggedIn: PropTypes.func,
+        logIn: PropTypes.func,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.onLoginButtonPress = this.onLoginButtonPress.bind(this);
-    }
-
-    async onLoginButtonPress(loginMethodName) {
-        switch (loginMethodName) {
-            case Account.LOGIN_METHOD_FACEBOOK:
-                try {
-                    await this.props.dispatch(LoginActions.logIn());
-                } catch (e) {
-                    console.log('onLoginButtonPress', e);
-                    alert(e.message);
-                }
-                break;
-            case Account.LOGIN_METHOD_ANONYMOUS:
-                break;
-        }
-    }
+    static defaultProps = {
+        onUserLoggedIn: () => {
+        },
+        logIn: () => {
+        },
+    };
 
     render() {
         const {currentUser} = this.props;
+
         if (!currentUser) {
             return (
-                <Login onLogin={this.onLoginButtonPress}/>
+                <Login onLogin={this.props.logIn}/>
             )
         }
 
@@ -68,6 +56,6 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(
-    mapStateToProps
-)(Account);
+export default connect(mapStateToProps, {
+    logIn
+})(Account);
