@@ -41,15 +41,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  // Set google api key
+  NSString *kAPIKey = @"AIzaSyCKviqZbZhb_1d477o8ZJvQaz1X1NzFObA";
+  [GMSServices provideAPIKey:kAPIKey];
+  [GMSPlacesClient provideAPIKey:kAPIKey];
+
   // Invoke facebook sdk delegate method
   [[FBSDKApplicationDelegate sharedInstance] application:application
                            didFinishLaunchingWithOptions:launchOptions];
   
-  // Set google api key
-  NSString *kAPIKey = @"AIzaSyCKviqZbZhb_1d477o8ZJvQaz1X1NzFObA";
-  [GMSPlacesClient provideAPIKey:kAPIKey];
-  [GMSServices provideAPIKey:kAPIKey];
-
   NSURL *jsCodeLocation;
 
 #ifdef DEBUG

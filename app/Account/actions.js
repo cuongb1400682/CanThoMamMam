@@ -71,7 +71,7 @@ export const logIn = () => async (dispatch, getState) => {
     const currentUserInfo = await getCurrentUserInformation();
 
     const credential = firebase.auth.FacebookAuthProvider.credential(accessToken.accessToken);
-    await firebase.auth().signInWithCredential(credential);
+    await firebase.auth().signInAndRetrieveDataWithCredential(credential);
 
     dispatch({
       type: types.USER_LOGIN_RESPONSE,

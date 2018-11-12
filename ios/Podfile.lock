@@ -12,6 +12,8 @@ PODS:
   - QBImagePickerController (3.4.0)
   - React (0.57.4):
     - React/Core (= 0.57.4)
+  - react-native-maps (0.22.1):
+    - React
   - React/ART (0.57.4):
     - React/Core
   - React/Core (0.57.4):
@@ -52,9 +54,10 @@ PODS:
   - yoga (0.57.4.React)
 
 DEPENDENCIES:
-  - GoogleMaps (= 2.0.1)
+  - GoogleMaps
   - GooglePlacePicker (= 2.0.1)
-  - GooglePlaces (= 2.0.1)
+  - GooglePlaces
+  - react-native-maps (from `../node_modules/react-native-maps`)
   - React/ART (from `../node_modules/react-native`)
   - React/Core (from `../node_modules/react-native`)
   - React/RCTActionSheet (from `../node_modules/react-native`)
@@ -82,6 +85,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   React:
     :path: "../node_modules/react-native"
+  react-native-maps:
+    :path: "../node_modules/react-native-maps"
   RNI18n:
     :path: "../node_modules/react-native-i18n"
   RNImageCropPicker:
@@ -95,11 +100,12 @@ SPEC CHECKSUMS:
   GooglePlaces: 72fab1d1651c6df0322f2aad245ffb15b80d3c56
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
+  react-native-maps: 066c2afcc89e18726377bcc685315f989ca22449
   RNI18n: 46b8694063fbd699f2c06a4dc8e835b3176763b1
   RNImageCropPicker: 32ca4b9fef4e1b7b85ba69494242122948117e06
   RSKImageCropper: 98296ad26b41753f796b6898d015509598f13d97
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 10a48f132f5f1ce30dc9089bddc7e841a03cfa2e
+PODFILE CHECKSUM: 23185210a6d944e9458140ef59c5b541f37c3822
 
 COCOAPODS: 1.5.3

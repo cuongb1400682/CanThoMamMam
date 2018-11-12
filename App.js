@@ -16,11 +16,13 @@ import Promotions from "./app/Promotions/index";
 import icHome from './app/res/images/ic_home.png'
 import icAccount from './app/res/images/ic_account_box.png'
 import icPromotions from "./app/res/images/ic_promotions.png"
+import icMap from "./app/res/images/ic_map.png"
 import codePush from "react-native-code-push";
 import {composeWithDevTools} from 'remote-redux-devtools';
 import user from "./app/Account/reducer";
 import places from "./app/components/PromotionList/reducer";
 import Colors from "./app/res/colors/index";
+import PlaceMapView from "./app/PlaceMapView/PlaceMapView";
 
 const startApp = () => {
     const reducer = combineReducers({user, places});
@@ -38,6 +40,7 @@ const startApp = () => {
     Navigation.registerComponent('Login', () => Login, store, Provider);
     Navigation.registerComponent('Promotions', () => Promotions, store, Provider);
     Navigation.registerComponent('ImageViewer', () => ImageViewer, store, Provider);
+    Navigation.registerComponent('PlaceMapView', () => PlaceMapView, store, Provider);
 
     Navigation.startTabBasedApp({
         tabs: [
@@ -54,6 +57,11 @@ const startApp = () => {
                 screen: 'Account',
                 title: 'Account',
                 icon: icAccount,
+            },
+            {
+                screen: 'PlaceMapView',
+                title: 'Map',
+                icon: icMap,
             },
         ],
         tabsStyle: {
