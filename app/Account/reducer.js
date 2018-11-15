@@ -26,7 +26,6 @@ export default function reducer(state = {currentUser: null}, action) {
           currentUser: action.payload,
         };
       }
-      break;
 
     case types.USER_LOGOUT_REQUEST:
       return {
@@ -48,7 +47,6 @@ export default function reducer(state = {currentUser: null}, action) {
           currentUser: null,
         };
       }
-      break;
 
   }
 

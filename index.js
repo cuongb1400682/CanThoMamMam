@@ -1,6 +1,5 @@
-import {startApp} from './App';
+import { AppRegistry } from 'react-native';
 
-startApp();
+import Root from './App';
 
-
-
+AppRegistry.registerComponent('Photos', () => Root);

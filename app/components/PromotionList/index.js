@@ -2,11 +2,10 @@ import React, {Component} from "react";
 import {FlatList,} from "react-native";
 import {connect} from "react-redux";
 import {Tile} from "react-native-elements";
-import PropTypes from "prop-types";
-
 import {database} from '../../../app/utils/FirebaseUtils';
 import {loadPromotions, getQueryId} from "./actions";
 import EmptyPromotionList from '../../../app/components/PromotionList/components/EmptyPromotionList/index';
+import PropTypes from "prop-types";
 
 class PromotionList extends Component {
   static propTypes = {
@@ -61,12 +60,12 @@ class PromotionList extends Component {
 
   navigateToPlaceDetails(place) {
     const {onPromotionPress} = this.props;
+
     if (onPromotionPress) {
       onPromotionPress(place)
     } else {
       this.props.navigator.push({
         screen: "PlaceDetails",
-        //title: place.name,
         passProps: {place},
       });
     }
@@ -78,7 +77,7 @@ class PromotionList extends Component {
     const data = items[queryId] ? items[queryId] : [];
 
     if (!loading && data.length === 0) {
-      return <EmptyPromotionList/>
+      return <EmptyPromotionList/>;
     }
 
     return (
@@ -89,7 +88,7 @@ class PromotionList extends Component {
         keyExtractor={item => item.id}
         renderItem={this.renderRow}
       />
-    )
+    );
   }
 }
 

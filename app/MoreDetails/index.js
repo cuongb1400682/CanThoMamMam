@@ -2,18 +2,22 @@ import React, {Component} from "react";
 import {Alert, ScrollView, StyleSheet, TouchableOpacity, View} from "react-native";
 import {connect} from "react-redux";
 import {addNewPlace, deletePlace, saveChanges} from "../utils/FirebaseUtils";
-import {Button, Icon, Tile} from 'react-native-elements';
+import {Button, Icon} from 'react-native-elements';
 import RNGooglePlacePicker from 'react-native-google-place-picker';
-import InputBox from "./InputBox";
+import InputBox from "./components/InputBox";
 import ImagesGallery from "../components/ImagesGallery/index";
 import {validateInput} from "../utils/InputValidationUtils";
-import CategoriesList from "./CategoriesList";
+import CategoriesList from "./components/CategoriesList";
+import ScheduleInput from "./components/ScheduleInput";
 import Promotions from "../Promotions/index";
-import {ImageSources} from "../utils/ImageSourcesUtils";
+import {ImagesSources} from "../utils/ImagesSourcesUtils";
+import {isEmpty} from "../utils/StringUtils";
 import {addPlaceToList, removePlaceFromList, updatePlaceById} from "../components/PromotionList/actions";
 import {showMessage} from "../../app/utils/ErrorHandlers/index";
 import Colors from "../res/colors/index";
 import * as res from "../res/index";
+import {tr} from "../res";
+import {removeLikedPlace} from "../components/UserAvatar/actions";
 
 class MoreDetails extends Component {
   static navigatorStyle = {
@@ -32,10 +36,8 @@ class MoreDetails extends Component {
   constructor(props) {
     super(props);
 
-    this.addNewlyUploadedPhotosToList = this.addNewlyUploadedPhotosToList.bind(this);
     this.onPickImagesFromSDCard = this.onPickImagesFromSDCard.bind(this);
     this.onPickImagesFromCamera = this.onPickImagesFromCamera.bind(this);
-    this.isImageUploading = false;
 
     let {images, placeDetails} = props;
 
@@ -53,6 +55,14 @@ class MoreDetails extends Component {
         },
         category: 0,
         images,
+        schedule: {
+          openHours: 0,
+          closeHours: 0,
+          workdays: [0, 1, 2, 3, 4, 5],
+          offdays: [6],
+          note: "",
+        },
+        food_prices: [],
         ext: {
           phone: "",
           email: "",
@@ -61,9 +71,15 @@ class MoreDetails extends Component {
       };
       this.isEdited = false;
     } else {
-      placeDetails = JSON.parse(JSON.stringify(placeDetails)); // make a copy of placeDetails from props
-      images = placeDetails.images;
+      placeDetails = JSON.parse(JSON.stringify(placeDetails));
       this.isEdited = true;
+    }
+
+    this.imagesSources = new ImagesSources();
+    this.imagesSources.setStateUpdateHandler(this.updatePlaceDetailsImages.bind(this));
+
+    if (this.isEdited) {
+      this.imagesSources.copyImagesFrom(placeDetails.images);
     }
 
     this.state = {
@@ -91,20 +107,18 @@ class MoreDetails extends Component {
         <ImagesGallery
           images={placeDetails.images}
           showAddNewItemButton
-          onAddNewItemButtonClick={this.onPickImagesFromSDCard.bind(this)}
           showDeleteItemButton
+          onAddNewItemButtonClick={this.addNewImages.bind(this)}
           onDeleteItemButtonClick={this.deleteImageAtIndex.bind(this)}
           navigator={this.props.navigator}
         />
         <CategoriesList
           categories={Promotions.categories.map(category => res.I18n.t(category.name))}
           categoryColors={Promotions.categories.map(category => category.color)}
-          title="categories"
+          title={tr('more_details_input_box_title_categories_list')}
           error={error.category}
           value={placeDetails.category}
-          onPress={(_, selectedIndex) => {
-            placeDetails.category = selectedIndex;
-          }}
+          onPress={(_, selectedIndex) => placeDetails.category = selectedIndex}
         />
         <InputBox
           ref="inputName"
@@ -113,8 +127,8 @@ class MoreDetails extends Component {
             this.setState({placeDetails});
           }}
           value={placeDetails.name}
-          title="name"
-          hint="Please enter name of place"
+          title={tr('more_details_input_box_title_input_name')}
+          hint={tr('more_details_input_box_hint_input_name')}
           error={error.name}
         />
         <InputBox
@@ -124,21 +138,22 @@ class MoreDetails extends Component {
             this.setState({placeDetails});
           }}
           value={placeDetails.description}
-          title="description"
+          title={tr('more_details_input_box_title_input_description')}
           multiline
-          hint="Leave some description for place"
+          hint={tr('more_details_input_box_hint_input_description')}
           error={error.description}
         />
         <InputBox
           ref="inputAddress"
           style={{flex: 1}}
+          multiline={true}
           onChangeText={displayName => {
             placeDetails.address.displayName = displayName;
             this.setState({placeDetails});
           }}
           editable={false}
-          title="address"
-          hint="1, Wall Street, New York, US"
+          title={tr('more_details_input_box_title_input_address')}
+          hint={tr('more_details_input_box_hint_input_address')}
           value={placeDetails.address.displayName}
           error={error.address}
           rightButton={
@@ -153,22 +168,62 @@ class MoreDetails extends Component {
             </TouchableOpacity>
           }
         />
-
+        <InputBox
+          ref="inputEmail"
+          style={{flex: 1}}
+          onChangeText={email => {
+            placeDetails.ext.email = email;
+            this.setState({placeDetails});
+          }}
+          editable={true}
+          title={tr('more_details_input_box_title_input_email')}
+          keyboardType="email-address"
+          hint={tr('more_details_input_box_hint_input_email')}
+          value={placeDetails.ext.email}
+          error={error.email}
+        />
+        <InputBox
+          ref="inputWebsite"
+          style={{flex: 1}}
+          onChangeText={website => {
+            placeDetails.ext.website = website;
+            this.setState({placeDetails});
+          }}
+          editable={true}
+          keyboardType={"url"}
+          title={tr('more_details_input_box_title_input_website')}
+          hint={tr('more_details_input_box_hint_input_website')}
+          value={placeDetails.ext.website}
+          error={error.website}
+        />
+        <InputBox
+          ref="inputPhone"
+          style={{flex: 1}}
+          keyboardType={"phone-pad"}
+          onChangeText={phone => {
+            placeDetails.ext.phone = phone;
+            this.setState({placeDetails});
+          }}
+          editable={true}
+          title={tr('more_details_input_box_title_input_phone_number')}
+          hint={tr('more_details_input_box_hint_input_phone_number')}
+          value={placeDetails.ext.phone}
+          error={error.phone}
+        />
         <View style={{height: 8}}/>
         <Button
           backgroundColor={Colors.primary}
           title={
             this.isEdited
-              ? 'SAVE CHANGES'
-              : 'ADD NEW PLACE'
+              ? tr('more_details_save_changes_button')
+              : tr('more_details_add_new_place_button')
           }
           onPress={this.handleInput.bind(this)}
         />
-
         {this.isEdited && <View style={{height: 4}}/>}
         {this.isEdited && <Button
           backgroundColor="red"
-          title="DELETE THIS PLACE"
+          title={tr('more_details_delete_place_button')}
           onPress={this.deletePlace.bind(this)}
         />}
         <View style={{height: 8}}/>
@@ -176,28 +231,40 @@ class MoreDetails extends Component {
     );
   }
 
+  updatePlaceDetailsImages(queue) {
+    const images = queue.reduce(
+      (accumulate, value) => {
+        if (value.waiting) {
+          return accumulate.concat({waiting: true, url: ""});
+        } else if (!isEmpty(value.url)) {
+          return accumulate.concat({url: value.url});
+        } else {
+          return accumulate.concat({error: value.error ? value.error.message : "Some problem occurred", url: ""});
+        }
+      }, []);
+    let {placeDetails} = this.state;
+    placeDetails.images = images;
+    this.setState({placeDetails});
+  }
+
   deleteImageAtIndex(index) {
     Alert.alert(
-      'Delete Image',
-      'Do you really want to delete this image?',
+      tr('more_details_delete_image_alert_title'),
+      tr('more_details_delete_image_alert_message'),
       [
         {
-          text: 'Yes', onPress: () => {
-          const {placeDetails} = this.state;
-          placeDetails.images.splice(index, 1);
-          this.setState({placeDetails});
-        }
+          text: tr('more_details_delete_image_alert_yes_button'),
+          onPress: () => this.imagesSources.removeImageAtIndex(index)
         },
-        {text: 'No', onPress: () => null},
+        {text: tr('more_details_delete_image_alert_no_button'), onPress: () => null},
       ],
     );
   }
 
   async onPickImagesFromCamera() {
     try {
-      const imageSources = await new ImageSources()
-        .pickImagesFromCamera();
-      this.addNewlyUploadedPhotosToList(await imageSources.startUploading());
+      await this.imagesSources.takeImageFromCamera();
+      await this.imagesSources.upload();
     } catch (e) {
       console.log(e);
     }
@@ -205,31 +272,23 @@ class MoreDetails extends Component {
 
   async onPickImagesFromSDCard() {
     try {
-      const imageSources = await new ImageSources()
-        .beforeUploading(() => this.isImageUploading = true)
-        .inUploading(uploadedImage => {
-          this.addNewlyUploadedPhotosToList([uploadedImage])
-        })
-        .afterUploading((_, nSuccess) => {
-          if (nSuccess === 0) {
-            showMessage("No image was uploaded");
-          } else {
-            showMessage(`Total ${nSuccess} image${nSuccess > 1 ? 's were' : ' was'} uploaded`);
-          }
-          this.isImageUploading = false;
-        })
-        .pickImagesFromSDCard();
-      await imageSources.startUploading();
+      await this.imagesSources.pickImagesFromSDCard();
+      await this.imagesSources.upload();
     } catch (e) {
-      showMessage("There is no uploaded image");
+      showMessage(tr("more_details_no_images_selected"));
       console.log(e);
     }
   }
 
-  addNewlyUploadedPhotosToList(newImages) {
-    const {placeDetails} = this.state;
-    placeDetails.images = [...placeDetails.images, ...newImages];
-    this.setState({placeDetails});
+  addNewImages() {
+    Alert.alert(
+      tr('more_details_images_sources_title'),
+      tr('more_details_images_sources_message'),
+      [
+        {text: tr('more_details_images_from_camera'), onPress: this.onPickImagesFromCamera},
+        {text: tr('more_details_images_from_sdcard'), onPress: this.onPickImagesFromSDCard},
+      ],
+    )
   }
 
   openLocationChooser() {
@@ -245,11 +304,13 @@ class MoreDetails extends Component {
           latitude,
           address: displayName,
         } = response;
+
         placeDetails.address = {
           longitude,
           latitude,
           displayName,
         };
+
         this.setState({placeDetails});
       }
     });
@@ -265,6 +326,8 @@ class MoreDetails extends Component {
       this.refs.inputDescription.focus();
     } else if (error.address) {
       this.refs.inputAddress.focus();
+    } else if (error.email) {
+      this.refs.inputEmail.focus();
     }
   }
 
@@ -273,17 +336,21 @@ class MoreDetails extends Component {
     const {currentUser} = this.props;
 
     if (!this.props.currentUser) {
-      showMessage(`Please login before ${this.isEdited ? "save changes" : "add this place"}`);
+      showMessage(
+        this.isEdited
+          ? tr('more_details_prompt_login_save_changes')
+          : tr('more_details_prompt_login_add_new_place')
+      );
       return;
     }
 
-    if (this.isImageUploading) {
-      showMessage("Please wait after uploading images");
+    if (this.imagesSources.isUploading() > 0) {
+      showMessage(tr('more_details_images_are_loading'));
       return;
     }
 
     if (!placeDetails.images || placeDetails.images.length === 0) {
-      showMessage("There must be at least 1 image for this place");
+      showMessage(tr('more_details_at_least_one_image_added'));
       return;
     }
 
@@ -297,12 +364,21 @@ class MoreDetails extends Component {
 
     const hasError = !!error.category || !!error.email || !!error.description || !!error.address || !!error.email;
 
+    if (!isEmpty(placeDetails.ext.website)) {
+      const urlTokens = placeDetails.ext.website.split("://");
+      if (urlTokens.length < 2) {
+        placeDetails.ext.website = `http://${urlTokens[0]}`;
+      }
+    }
+
     if (hasError) {
       await this.setState({error});
       this.focusOnFirstErrorInputBox();
-      showMessage('Some invalid inputs are detected!');
+      showMessage(tr('more_details_input_error_detected'));
     } else {
       try {
+        placeDetails.images = placeDetails.images.filter(image => !image.error);
+        placeDetails.search_name = placeDetails.name.toLowerCase();
         if (this.isEdited) {
           await saveChanges(placeDetails);
           this.props.dispatch(updatePlaceById(placeDetails));
@@ -319,6 +395,7 @@ class MoreDetails extends Component {
         this.close();
       } catch (e) {
         showMessage(e.message);
+        console.log('MoreDetails.handleInput: ', e);
       }
     }
   }
@@ -331,22 +408,27 @@ class MoreDetails extends Component {
       currentUser: {id: userId},
     } = this.props;
     Alert.alert(
-      'Delete Place',
-      'Deleted place cannot be restored. Are you sure?',
+      tr('more_details_delete_place_confirm_title'),
+      tr('more_details_delete_place_confirm_message'),
       [
         {
-          text: 'Yes', onPress: async () => {
-          try {
-            await deletePlace(placeId);
-            this.props.dispatch(removePlaceFromList(placeId, [userId, "-1", category]));
-            this.close();
-          } catch (e) {
-            showMessage("Some problem during process of deleting this place");
-            console.log(e);
+          text: tr('more_details_delete_place_alert_yes_button'),
+          onPress: async () => {
+            try {
+              await deletePlace(placeId);
+              this.props.dispatch(removePlaceFromList(placeId, [userId, "-1", category, "favoritePlacesForCurrentUser"]));
+              this.props.dispatch(removeLikedPlace(placeId));
+              this.close();
+            } catch (e) {
+              showMessage(tr("more_details_delete_place_error_message"));
+              console.log(e);
+            }
           }
-        }
         },
-        {text: 'No', onPress: () => null},
+        {
+          text: tr('more_details_delete_place_alert_no_button'),
+          onPress: () => null,
+        },
       ],
     );
   }

@@ -7,8 +7,7 @@ import Colors from "../res/colors/index";
 import {Icon} from "react-native-elements";
 import {centerAll} from "../res/styles/index";
 import * as res from "../../app/res/index";
-
-console.log(res);
+import PropTypes from "prop-types";
 
 class Promotions extends Component {
   static navigatorStyle = {

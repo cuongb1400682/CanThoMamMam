@@ -60,6 +60,8 @@ export default function reducer(state = initState, action) {
           state.items[queryId] = [...state.items[queryId], place];
         }
       });
+      console.log("in types.ADD_PLACE_TO_LIST: state = ");
+      console.log(state);
       return {
         ...state,
         loading: false,

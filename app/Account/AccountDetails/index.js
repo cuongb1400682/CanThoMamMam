@@ -2,60 +2,97 @@
  * Created by letqt on 9/8/17.
  */
 import React, {Component} from "react";
-import {Image, View, Dimensions} from "react-native";
-
+import {View} from "react-native";
 import {connect} from "react-redux";
-import Header from './Header/index'
-import InfoRow from '../../../app/PlaceDetails/InfoRow/index'
+import Header from '../../components/UserAvatar/index'
+import InfoRow from '../../PlaceDetails/components/InfoRow/index'
 import * as res from "../../../app/res/index";
-import {Button, Divider, SocialIcon} from "react-native-elements";
+import {Button, Divider} from "react-native-elements";
 import {logOut} from "../../../app/Account/actions";
+import {countUserFavoritePlaces, getPlacesStatistic} from "../../utils/StatisticsUtils";
+import {tr} from "../../res";
 
 class AccountDetails extends Component {
   constructor(props) {
     super(props);
+    this.showMyAddedPlaces = this.showMyAddedPlaces.bind(this);
+  }
+
+  showMyAddedPlaces(query, title, passProps = {}) {
+    this.props.navigator.push({
+      screen: "MyAddedPlaces",
+      title,
+      passProps: {query, ...passProps},
+    });
   }
 
   render() {
-    const {currentUser} = this.props;
+    const {currentUser, places, currentUserInfo} = this.props;
+
+    const statistics =
+      getPlacesStatistic(places.items["-1"].filter(item => item.user.id === currentUser.id));
+
+    //console.log('in AccountDetails: currentUserInfo = ');
+    //console.log(currentUserInfo);
 
     return (
       <View style={styles.container}>
         <Header
           style={{marginBottom: 16, marginTop: 16}}
-          following={1234}
-          avatar={currentUser.avatar}
-          name={currentUser.fullName}/>
+          userId={currentUser.id}
+        />
 
         <Divider style={{marginBottom: 16}}/>
 
         <InfoRow
           icon="place"
-          title={res.I18n.t('my_created_places')}
-          onPress={() => this.props.navigator.push({screen: "MyAddedPlaces",title: "My Places"})}
-          content={1234}/>
+          title={res.I18n.t('account_details_my_added_places')}
+          onPress={() => {
+            this.showMyAddedPlaces({userId: currentUser.id}, tr('account_details_navigate_to_my_added_places_title'))
+          }}
+          content={`Tổng cộng ${statistics.total} nơi`}/>
+        <InfoRow
+          icon="favorite"
+          title={tr("account_details_my_favorite_places")}
+          content={`Có ${countUserFavoritePlaces(currentUserInfo)} nơi`}
+          onPress={() => {
+            let query = {};
+            if (!!currentUserInfo && !!currentUserInfo.likedPlaces) {
+              query = {which: currentUserInfo.likedPlaces};
+            }
+            this.showMyAddedPlaces(
+              query,
+              tr('account_details_my_favorite_places'),
+              {showOnlyPlaceDetails: true}
+            );
+          }}
+        />
         <InfoRow
           icon="free-breakfast"
-          title={res.I18n.t('my_coffee')}
-          onPress={() => alert(res.I18n.t('my_coffee'))}
-          content={1234}/>
+          title={tr('account_details_navigate_to_my_coffee')}
+          onPress={() => {
+            this.showMyAddedPlaces({userId: currentUser.id, id: 1}, tr('account_details_navigate_to_my_coffee'))
+          }}
+          content={`Có ${statistics.coffee} nơi`}/>
         <InfoRow
           icon="local-drink"
-          title={res.I18n.t('my_beers')}
-          onPress={() => alert(res.I18n.t('my_beers'))}
-          content={1234}/>
-
+          title={tr('account_details_navigate_to_my_pub')}
+          onPress={() => {
+            this.showMyAddedPlaces({userId: currentUser.id, id: 2}, tr('account_details_navigate_to_my_pub'))
+          }}
+          content={`Có ${statistics.pub} nơi`}/>
         <InfoRow
           icon="room-service"
-          title={res.I18n.t('my_foods')}
-          onPress={() => alert(res.I18n.t('my_foods'))}
-          content={1234}/>
-
+          title={tr('account_details_navigate_to_my_food')}
+          onPress={() => {
+            this.showMyAddedPlaces({userId: currentUser.id, id: 0}, tr('account_details_navigate_to_my_food'))
+          }}
+          content={`Có ${statistics.food} nơi`}/>
         <View style={{flex: 1}}/>
 
         <Button
           style={{backgroundColor: 'gray'}}
-          title={res.I18n.t('log_out')}
+          title={tr('account_details_log_out_button_title')}
           onPress={this.props.logOut}
         />
       </View>
@@ -72,9 +109,11 @@ const styles = {
 };
 
 const mapStateToProps = (state) => {
-  const {user: {currentUser}} = state;
+  const {user: {currentUser}, places, usersInfo} = state;
   return {
-    currentUser
+    currentUser,
+    places,
+    currentUserInfo: (usersInfo && usersInfo.items) ? usersInfo.items[currentUser.id] : {},
   };
 };
 

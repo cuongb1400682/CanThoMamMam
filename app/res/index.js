@@ -1,11 +1,3 @@
-const images = {
-  aborted: require('./images/aborted.png'),
-  completed: require('./images/completed.png'),
-  failed: require('./images/failed.png'),
-  facebook: require('./images/facebook.png'),
-  anonymous: require('./images/anonymous.png'),
-};
-
 const I18n = require("react-native-i18n");
 I18n.fallbacks = true;
 I18n.translations = {
@@ -14,12 +6,21 @@ I18n.translations = {
 };
 
 I18n.t = (string) => {
-    const localString = I18n.translations.vi[string];
-
-    return localString ? localString : string;
+  if (string in I18n.translations.vi) {
+    return I18n.translations.vi[string];
+  } else {
+    return string;
+  }
 };
+
+
+export const getCurrentLanguage = () => "vi";
+
+export function languageSelect(selection = {}) {
+  return selection["vi"];
+}
 
 module.exports = {
   I18n,
-  images,
+  tr: I18n.t
 };

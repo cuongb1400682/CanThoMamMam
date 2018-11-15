@@ -16,62 +16,51 @@ import Promotions from "./app/Promotions/index";
 import icHome from './app/res/images/ic_home.png'
 import icAccount from './app/res/images/ic_account_box.png'
 import icPromotions from "./app/res/images/ic_promotions.png"
-import icMap from "./app/res/images/ic_map.png"
 import codePush from "react-native-code-push";
 import {composeWithDevTools} from 'remote-redux-devtools';
 import user from "./app/Account/reducer";
 import places from "./app/components/PromotionList/reducer";
+import usersInfo from "./app/components/UserAvatar/reducer";
+import comments from "./app/components/Comments/reducer";
 import Colors from "./app/res/colors/index";
-import PlaceMapView from "./app/PlaceMapView/PlaceMapView";
 
-const startApp = () => {
-    const reducer = combineReducers({user, places});
+const reducer = combineReducers({user, places, usersInfo, comments});
 
-    const middleWares = composeWithDevTools(applyMiddleware(thunk), autoRehydrate());
-    const store = createStore(reducer, undefined, middleWares);
+const middleWares = composeWithDevTools(applyMiddleware(thunk), autoRehydrate());
+export const store = createStore(reducer, undefined, middleWares);
 
-    persistStore(store, {storage: AsyncStorage});
+persistStore(store, {storage: AsyncStorage});
 
-    Navigation.registerComponent('PlacesList', () => PlacesList, store, Provider);
-    Navigation.registerComponent('MyAddedPlaces', () => MyAddedPlaces, store, Provider);
-    Navigation.registerComponent('PlaceDetails', () => PlaceDetails, store, Provider);
-    Navigation.registerComponent('Account', () => Account, store, Provider);
-    Navigation.registerComponent('MoreDetails', () => MoreDetails, store, Provider);
-    Navigation.registerComponent('Login', () => Login, store, Provider);
-    Navigation.registerComponent('Promotions', () => Promotions, store, Provider);
-    Navigation.registerComponent('ImageViewer', () => ImageViewer, store, Provider);
-    Navigation.registerComponent('PlaceMapView', () => PlaceMapView, store, Provider);
+// Screens
+Navigation.registerComponent('PlacesList', () => PlacesList, store, Provider);
+Navigation.registerComponent('MyAddedPlaces', () => MyAddedPlaces, store, Provider);
+Navigation.registerComponent('PlaceDetails', () => PlaceDetails, store, Provider);
+Navigation.registerComponent('Account', () => Account, store, Provider);
+Navigation.registerComponent('MoreDetails', () => MoreDetails, store, Provider);
+Navigation.registerComponent('Login', () => Login, store, Provider);
+Navigation.registerComponent('Promotions', () => Promotions, store, Provider);
+Navigation.registerComponent('ImageViewer', () => ImageViewer, store, Provider);
 
-    Navigation.startTabBasedApp({
-        tabs: [
-            {
-                screen: 'PlacesList',
-                icon: icHome,
-            },
-            {
-                screen: 'Promotions',
-                title: 'Promotions',
-                icon: icPromotions,
-            },
-            {
-                screen: 'Account',
-                title: 'Account',
-                icon: icAccount,
-            },
-            {
-                screen: 'PlaceMapView',
-                title: 'Map',
-                icon: icMap,
-            },
-        ],
-        tabsStyle: {
-            tabBarSelectedButtonColor: Colors.primary,
-        }
-    });
+Navigation.startTabBasedApp({
+  tabs: [
+    {
+      screen: 'PlacesList',
+      icon: icHome,
+    },
+    {
+      screen: 'Promotions',
+      title: 'Promotions',
+      icon: icPromotions,
+    },
+    {
+      screen: 'Account',
+      title: 'Account',
+      icon: icAccount,
+    },
+  ],
+  tabsStyle: { // iOS only
+    tabBarSelectedButtonColor: Colors.primaryDark,
+  }
+});
 
-    codePush({checkFrequency: codePush.CheckFrequency.ON_APP_RESUME})(store);
-};
-
-export {
-    startApp
-};
+export default codePush({checkFrequency: codePush.CheckFrequency.ON_APP_RESUME})(store);

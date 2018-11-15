@@ -9,21 +9,6 @@ export function isValidEmail(email) {
 
 // this function converts strings like "helloFromEspana" or "hello_from_espana" to "Hello From Espana"
 export function convertToCapitalizedText(text) {
-  let result = text.charAt(0).toUpperCase();
-  for (let i = 1; i < text.length; i++) {
-    let prevChar = text.charAt(i - 1);
-    let char = text.charAt(i);
-    if (char === "_" || char === "-") {
-      continue;
-    }
-    if (char === char.toUpperCase()) {
-      result += " ";
-    }
-    if (prevChar === "_" || prevChar === "-") {
-      result += " ";
-      char = char.toUpperCase();
-    }
-    result += char;
-  }
-  return result;
+  //return text.replace(/(?:^|\s)\S/g, a => a.toUpperCase());
+  return text[0].toUpperCase() + text.substr(1,text.length-1);
 }

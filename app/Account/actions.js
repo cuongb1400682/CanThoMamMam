@@ -1,3 +1,5 @@
+import {addUserInfo} from "../utils/FirebaseUtils";
+
 const facebookSdk = require('react-native-fbsdk');
 const firebase = require('firebase');
 
@@ -17,7 +19,6 @@ export const types = {
 
 async function getFacebookAccessToken() {
   const fbLoginResult = await LoginManager.logInWithReadPermissions(['public_profile', 'user_friends']);
-  console.log('fbLoginResult', fbLoginResult)
   if (fbLoginResult.isCancelled) {
     throw {message: 'Login was cancelled'};
   } else {
@@ -31,7 +32,7 @@ async function getCurrentUserInformation() {
       '/me?fields=picture.type(large),name,id',
       null,
       (error, result) => {
-        console.log('result', result)
+        console.log('result', result);
         if (error) {
           reject(error);
         } else {
@@ -60,18 +61,21 @@ export const logOut = () => async (dispatch, getState) => {
 export const logIn = () => async (dispatch, getState) => {
   dispatch({type: types.USER_LOGIN_REQUEST});
 
+  console.log("in logIn");
+
   try {
 
-    if (getState().currentUser) {
+    if (getState().currentUser !== null) {
       await firebase.auth().signOut();
       await LoginManager.logOut();
     }
 
     const accessToken = await getFacebookAccessToken();
     const currentUserInfo = await getCurrentUserInformation();
-
     const credential = firebase.auth.FacebookAuthProvider.credential(accessToken.accessToken);
-    await firebase.auth().signInAndRetrieveDataWithCredential(credential);
+
+    await firebase.auth().signInWithCredential(credential);
+    await addUserInfo(currentUserInfo);
 
     dispatch({
       type: types.USER_LOGIN_RESPONSE,
@@ -83,6 +87,7 @@ export const logIn = () => async (dispatch, getState) => {
     });
 
   } catch (e) {
+    console.log('in logIn: ', e);
     dispatch({type: types.USER_LOGIN_RESPONSE, payload: e, error: true});
   }
 };

@@ -1,4 +1,5 @@
 import {fetchPlaces} from "../../utils/FirebaseUtils";
+import * as categoryUtils from "../../utils/CategoryUtils";
 
 export const types = {
   LOAD_PROMOTIONS_REQUESTED: 'LOAD_PROMOTIONS_REQUESTED',
@@ -11,10 +12,18 @@ export const types = {
 
 export function getQueryId(query) {
   if (query) {
-    if (typeof(query.id) === 'number' && query.id > -1) {
+    const hasCategoryId = categoryUtils.hasCategoryId(query);
+    const hasUserId = categoryUtils.hasUserId(query);
+    if (hasCategoryId && hasUserId) {
+      return `${query.userId}/${query.id}`;
+    } else if (hasCategoryId) {
       return query.id;
-    } else if (query.userId) {
+    } else if (hasUserId) {
       return query.userId;
+    } else if (query.keyword) {
+      return query.keyword;
+    } else if (query.which) {
+      return "favoritePlacesForCurrentUser";
     }
   }
   return "-1";

@@ -1,7 +1,10 @@
-const PropTypes = require("prop-types");
+import {getThumbUrl} from "../../../utils/ImgurUtils";
+import {Icon} from "react-native-elements";
+import Colors from "../../../res/colors/index";
+import PropTypes from "prop-types";
+
 const React = require('react');
 const {ViewPropTypes} = ReactNative = require('react-native');
-
 const {
   StyleSheet,
   Text,
@@ -10,11 +13,9 @@ const {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  ActivityIndicator,
 } = ReactNative;
-
 import createReactClass from "create-react-class";
-import {Icon} from "react-native-elements";
-import Colors from "../../../res/colors/index";
 
 export const IMAGE_SIZE = 64;
 const WINDOW_WIDTH = Dimensions.get('window').width;
@@ -32,8 +33,9 @@ export default createReactClass({
     renderTab: PropTypes.func,
     underlineStyle: ViewPropTypes.style,
     showDeleteItemButton: PropTypes.boolean,
-    onDeleteItemButtonClick: PropTypes.func,
     showAddNewItemButton: PropTypes.boolean,
+    showLoadingIndicator: PropTypes.number,
+    onDeleteItemButtonClick: PropTypes.func,
     onAddNewItemButtonClick: PropTypes.func,
   },
 
@@ -58,14 +60,35 @@ export default createReactClass({
     }
   },
 
+  renderTabPage(name) {
+    if (name.waiting) {
+      return (
+        <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+          <ActivityIndicator size="small" color={Colors.primary}/>
+        </View>
+      );
+    } else if (name.error) {
+      return (
+        <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+          <Icon name={"warning"} color={"yellow"}/>
+        </View>
+      );
+    } else {
+      return (
+        <Image
+          style={styles.imagesContent}
+          source={{uri: getThumbUrl(name)}}
+        />
+      );
+    }
+  },
+
   renderTab(name, page, isTabActive, onPressHandler) {
-    const {activeTextColor, inactiveTextColor, textStyle,} = this.props;
-    const textColor = isTabActive ? activeTextColor : inactiveTextColor;
-    const fontWeight = isTabActive ? 'bold' : 'normal';
     const {
       showDeleteItemButton,
       onDeleteItemButtonClick,
     } = this.props;
+
     return (
       <TouchableOpacity
         key={page}
@@ -73,13 +96,10 @@ export default createReactClass({
         onPress={() => onPressHandler(page)}
       >
         <View style={{width: IMAGE_SIZE, height: IMAGE_SIZE, opacity: isTabActive ? 1 : 0.4}}>
-          <Image
-            style={styles.imagesContent}
-            source={{uri: name}}
-          />
+          {this.renderTabPage(name)}
         </View>
-        {showDeleteItemButton && <TouchableOpacity
-          onPress={onDeleteItemButtonClick}
+        {(showDeleteItemButton && !name.waiting) && <TouchableOpacity
+          onPress={() => onDeleteItemButtonClick(page)}
           style={styles.deleteButton}>
           <Icon
             style={{opacity: 1, flex: 1}}
@@ -93,21 +113,10 @@ export default createReactClass({
   },
 
   render() {
-    const containerWidth = this.props.containerWidth;
-    const numberOfTabs = this.props.tabs.length;
-    const tabUnderlineStyle = {
-      position: 'absolute',
-      width: containerWidth / numberOfTabs,
-      height: 4,
-      backgroundColor: 'navy',
-      bottom: 0,
-    };
     const {
       showAddNewItemButton,
       onAddNewItemButtonClick,
     } = this.props;
-
-    console.log("IMAGE_SIZE = ", IMAGE_SIZE);
 
     return (
       <View style={{height: IMAGE_SIZE}}>
@@ -125,7 +134,7 @@ export default createReactClass({
           })}
           {showAddNewItemButton &&
           <TouchableOpacity
-            style={styles.addItemButton}
+            style={styles.surplusItem}
             onPress={onAddNewItemButtonClick}
           >
             <View style={styles.iconContainer}>
@@ -176,7 +185,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderTopLeftRadius: 3,
   },
-  addItemButton: {
+  surplusItem: {
     height: IMAGE_SIZE,
     width: IMAGE_SIZE,
     alignItems: "center",

@@ -2,11 +2,13 @@ import {StyleSheet, View, Platform} from 'react-native';
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import ActionButton from "react-native-action-button";
+import PropTypes from "prop-types";
 
 import {SearchBar, Tile} from "react-native-elements";
 import PromotionList from "../components/PromotionList";
 import Colors from "../res/colors/index";
 import codePush from "react-native-code-push";
+import {tr} from "../res";
 
 class PlacesList extends Component {
   static navigatorStyle = {
@@ -29,7 +31,7 @@ class PlacesList extends Component {
   navigateToAddPromotion() {
     this.props.navigator.showModal({
       screen: "MoreDetails",
-      title: "Add new place",
+      title: tr("places_list_navigate_to_add_place_title"),
       passProps: {images: []},
     });
   }
@@ -40,6 +42,7 @@ class PlacesList extends Component {
   }
 
   search(keyword) {
+    keyword=keyword.toLowerCase();
     this.setState({query: {keyword}})
   }
 
@@ -61,7 +64,7 @@ class PlacesList extends Component {
           containerStyle={{backgroundColor: 'white', borderTopWidth: 0}}
           inputStyle={{backgroundColor: 'white', borderWidth: 1, borderColor: '#e1e8ee'}}
           onChangeText={this.onChangeText}
-          placeholder='Search...'
+          placeholder={tr('places_list_search_bar_place_holder')}
           textInputRef={'textInputRef'}
           clearIcon
         />
