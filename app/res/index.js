@@ -13,11 +13,11 @@ I18n.t = (string) => {
   }
 };
 
-
-export const getCurrentLanguage = () => "vi";
-
-export function languageSelect(selection = {}) {
-  return selection["vi"];
+export function languageSelect(selection = {
+  vi: "",
+  any: ""
+}) {
+  return selection.vi || selection.any
 }
 
 module.exports = {

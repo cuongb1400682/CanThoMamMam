@@ -66,19 +66,8 @@ export function timestamp2Date(timestamp) {
   console.log("in timestamp2Date: timestamp = ", JSON.stringify(timestamp));
 
   if (typeof(timestamp) !== 'number') {
-    return languageSelect({
-      any: `Seconds ago`,
-      vi: `Vài giây trước`,
-    });
+    return `Vài giây trước`
   }
 
-  return languageSelect({
-    any: (
-      `at ${date.toLocaleTimeString()}` +
-      ` ${abbreviatedMonthNames[date.getMonth()]}` +
-      ` ${getNumericalOrder(date.getDate())}` +
-      ` ${date.getFullYear()}`
-    ),
-    vi: getVietnameseDate(date),
-  });
+  return getVietnameseDate(date);
 }

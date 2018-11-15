@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ActivityIndicator, Dimensions, Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Dimensions, ImageBackground, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Icon, Text} from 'react-native-elements';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import ImagesTabBar, {IMAGE_SIZE} from "./ImagesTabBar/index";
@@ -95,7 +95,7 @@ export default class ImagesGallery extends Component {
           }
         }}
       >
-        <Image
+        <ImageBackground
           source={{uri: item.url}}
           style={{
             alignItems: 'center',
@@ -143,7 +143,7 @@ export default class ImagesGallery extends Component {
               }}>{placeAddress}</Text>
             </View>
           </View>
-        </Image>
+        </ImageBackground>
       </TouchableOpacity>
     );
   }

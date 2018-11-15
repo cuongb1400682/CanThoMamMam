@@ -23,6 +23,7 @@ import places from "./app/components/PromotionList/reducer";
 import usersInfo from "./app/components/UserAvatar/reducer";
 import comments from "./app/components/Comments/reducer";
 import Colors from "./app/res/colors/index";
+import * as res from "./app/res/index";
 
 const reducer = combineReducers({user, places, usersInfo, comments});
 

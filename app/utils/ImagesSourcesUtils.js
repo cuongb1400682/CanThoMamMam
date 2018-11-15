@@ -104,10 +104,7 @@ export class ImagesSources {
       } catch (e) {
         const message = e.message
           ? e.message
-          : languageSelect({
-            any: `Cannot upload the image at '${this.imagesQueue[i].path}'`,
-            vi: `Không thể tải lên ảnh tại '${this.imagesQueue[i].path}'`
-          });
+          : `Không thể tải lên ảnh tại '${this.imagesQueue[i].path}'`
         console.log(`in ImagesSources.upload: ${JSON.stringify(e)}`);
         this.imagesQueue[i].error = {message};
         this.imagesQueue[i].url = "";

@@ -37,7 +37,7 @@ export default class Voter extends React.Component {
 
     return (
       <TouchableElement onPress={onPress}>
-        <View style={[...style, {flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: 44}]}>
+        <View style={[{flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: 44}]}>
           <Icon
             name={isLikeButton ? 'thumb-up' : 'thumb-down'}
             color={isSelected ? selectedColor : unselectedColor}

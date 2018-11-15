@@ -83,14 +83,9 @@ export default class PlaceDetails extends Component {
 
   reportWrongContent(place) {
     try {
-      const uri = languageSelect({
-        any: encodeURI(`mailto:canthomammam@gmail.com?` +
-          `subject=[REPORT] Content problem with ${place.name} (id: ${place.id})&body=` +
-          `Write your report content here!`),
-        vi: encodeURI(`mailto:canthomammam@gmail.com?` +
-          `subject=[BÁO CÁO] Có sai sót tại '${place.name}' (id: ${place.id})&body=` +
-          `Hãy viết những sai sót bạn tìm thấy ở đây!`),
-      });
+      const uri = encodeURI(`mailto:canthomammam@gmail.com?` +
+        `subject=[BÁO CÁO] Có sai sót tại '${place.name}' (id: ${place.id})&body=` +
+        `Hãy viết những sai sót bạn tìm thấy ở đây!`);
       Linking.openURL(uri);
     } catch (e) {
       showMessage(e.message);
@@ -175,10 +170,7 @@ export default class PlaceDetails extends Component {
               await Linking.openURL(placeExt.website);
             }
           } catch (e) {
-            showMessage(languageSelect({
-              any: `Cannot open ${item} (${placeExt[item]})`,
-              vi: `Không truy cập ${tr(item)} (${placeExt[item]})`,
-            }));
+            showMessage(`Không truy cập ${tr(item)} (${placeExt[item]})`)
           }
         }}
       />

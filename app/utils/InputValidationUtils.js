@@ -3,10 +3,7 @@ import {languageSelect, tr} from "../res";
 
 function checkEmpty(fieldName, value) {
   if (isEmpty(value)) {
-    return languageSelect({
-      any: `* ${fieldName} must not be empty`,
-      vi:`* ${fieldName} không được để trống`,
-    });
+    return`* ${fieldName} không được để trống`
   } else {
     return null;
   }
@@ -14,10 +11,7 @@ function checkEmpty(fieldName, value) {
 
 function checkAddress(address) {
   if (!address || isEmpty(address.displayName)) {
-    return languageSelect({
-      any: "* Address must be selected",
-      vi: "* Phải chọn địa chỉ",
-    });
+    return "* Phải chọn địa chỉ"
   } else {
     return null;
   }
@@ -25,10 +19,7 @@ function checkAddress(address) {
 
 function checkEmail(email) {
   if (email && !isValidEmail(email)) {
-    return languageSelect({
-      any: "* Email is invalid",
-      vi: "* Email không hợp lệ",
-    });
+    return "* Email không hợp lệ"
   } else {
     return null;
   }
@@ -36,10 +27,7 @@ function checkEmail(email) {
 
 function checkCategory(category) {
   if (isEmpty(category)) {
-    return languageSelect({
-      any: "* Category must be picked",
-      vi: "* Phải phân loại nơi này",
-    });
+    return "* Phải phân loại nơi này"
   } else {
     return null;
   }
