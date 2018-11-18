@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {ActivityIndicator, Text, View} from "react-native";
 import ImageViewerComponent from 'react-native-image-zoom-viewer';
 import PropTypes from "prop-types";
 
@@ -25,11 +26,17 @@ export default class ImageViewer extends Component {
     if (typeof(this.props.index) === 'number') {
       index = this.props.index;
     }
-
+    
     return (
       <ImageViewerComponent
         imageUrls={this.props.images}
         index={index}
+        loadingRender={() =>
+          <View style={{backgroundColor: "#000", justifyContent: "center", alignItems: "center"}}>
+            <ActivityIndicator/>
+            <Text style={{color: "#fff"}}>Đang tải hình...</Text>
+          </View>
+        }
       />
     );
   }

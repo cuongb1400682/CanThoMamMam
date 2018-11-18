@@ -18,7 +18,7 @@
     "react-native-google-place-picker": "^1.2.1",
     "react-native-i18n": "^2.0.15",
     "react-native-image-crop-picker": "^0.21.3",
-    "react-native-image-zoom-viewer": "^2.2.23",
+    "react-native-image-zoom-viewer": "2.0.10",
     "react-native-maps": "^0.22.1",
     "react-native-navigation": "1.1.178",
     "react-native-progress": "^3.5.0",

@@ -9,9 +9,8 @@ export default ({onLogin, isWaiting}) => {
   return (
     <View style={styles.container}>
       <Image style={{width: Dimensions.get('window').width}}
-             resizeMode={Image.resizeMode.contain}
-             source={logo}/>
 
+             source={logo}/>
       <SocialIcon
         title={tr('log_in_with_facebook_button_title')}
         button

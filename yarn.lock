@@ -4393,6 +4393,10 @@ npmlog@^4.0.2:
     gauge "~2.7.3"
     set-blocking "~2.0.0"
 
+nt-transmit-transparently@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/nt-transmit-transparently/-/nt-transmit-transparently-1.0.7.tgz#345cf3ffda06ba1bd629935bafac9e7820385076"
+
 nullthrows@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/nullthrows/-/nullthrows-1.1.0.tgz#832bb19ef7fedab989f81675c846e2858a3917a2"
@@ -4999,15 +5003,16 @@ react-native-image-crop-picker@^0.21.3:
   version "0.21.3"
   resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.21.3.tgz#04457a3f2a888949f51be4a670dcf2520b9994f8"
 
-react-native-image-pan-zoom@^2.1.9:
+react-native-image-pan-zoom@^2.0.5:
   version "2.1.11"
   resolved "https://registry.yarnpkg.com/react-native-image-pan-zoom/-/react-native-image-pan-zoom-2.1.11.tgz#61bcb69219d95e76a9797d23e4a2e8e0bd654ae9"
 
-react-native-image-zoom-viewer@^2.2.23:
-  version "2.2.23"
-  resolved "https://registry.yarnpkg.com/react-native-image-zoom-viewer/-/react-native-image-zoom-viewer-2.2.23.tgz#364f65792edacd7354b48982843dbfc9db5d438e"
+react-native-image-zoom-viewer@2.0.10:
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/react-native-image-zoom-viewer/-/react-native-image-zoom-viewer-2.0.10.tgz#792c4cb7ff0145c36390e4c6703bfe45aa492bd3"
   dependencies:
-    react-native-image-pan-zoom "^2.1.9"
+    nt-transmit-transparently "^1.0.7"
+    react-native-image-pan-zoom "^2.0.5"
 
 react-native-maps@^0.22.1:
   version "0.22.1"

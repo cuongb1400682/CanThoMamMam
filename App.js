@@ -23,7 +23,7 @@ import places from "./app/components/PromotionList/reducer";
 import usersInfo from "./app/components/UserAvatar/reducer";
 import comments from "./app/components/Comments/reducer";
 import Colors from "./app/res/colors/index";
-import * as res from "./app/res/index";
+import PlaceMap from "./app/PlaceMap/PlaceMap";
 
 const reducer = combineReducers({user, places, usersInfo, comments});
 
@@ -38,30 +38,43 @@ Navigation.registerComponent('MyAddedPlaces', () => MyAddedPlaces, store, Provid
 Navigation.registerComponent('PlaceDetails', () => PlaceDetails, store, Provider);
 Navigation.registerComponent('Account', () => Account, store, Provider);
 Navigation.registerComponent('MoreDetails', () => MoreDetails, store, Provider);
+Navigation.registerComponent('PlaceMap', () => PlaceMap, store, Provider);
 Navigation.registerComponent('Login', () => Login, store, Provider);
 Navigation.registerComponent('Promotions', () => Promotions, store, Provider);
 Navigation.registerComponent('ImageViewer', () => ImageViewer, store, Provider);
 
-Navigation.startTabBasedApp({
-  tabs: [
-    {
-      screen: 'PlacesList',
-      icon: icHome,
-    },
-    {
-      screen: 'Promotions',
-      title: 'Promotions',
-      icon: icPromotions,
-    },
-    {
-      screen: 'Account',
-      title: 'Account',
-      icon: icAccount,
-    },
-  ],
-  tabsStyle: { // iOS only
-    tabBarSelectedButtonColor: Colors.primaryDark,
-  }
-});
+const startApp = () => {
+  Navigation.startTabBasedApp({
+    tabs: [
+      {
+        screen: 'PlacesList',
+        label: 'Trang chủ',
+        icon: icHome,
+      },
+      {
+        screen: 'Promotions',
+        label: 'Phân loại',
+        icon: icPromotions,
+      },
+      {
+        screen: 'PlaceMap',
+        label: 'Gần đây',
+        icon: icPromotions,
+      },
+      {
+        screen: 'Account',
+        label: 'Tài khoản',
+        icon: icAccount,
+      },
+    ],
+    tabsStyle: { // iOS only
+      tabBarSelectedButtonColor: Colors.primaryDark,
+    }
+  });
 
-export default codePush({checkFrequency: codePush.CheckFrequency.ON_APP_RESUME})(store);
+  codePush({checkFrequency: codePush.CheckFrequency.ON_APP_RESUME})(store);
+};
+
+export {
+  startApp
+};
