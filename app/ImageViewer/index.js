@@ -26,7 +26,7 @@ export default class ImageViewer extends Component {
     if (typeof(this.props.index) === 'number') {
       index = this.props.index;
     }
-    
+
     return (
       <ImageViewerComponent
         imageUrls={this.props.images}
