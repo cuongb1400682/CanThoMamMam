@@ -17,7 +17,6 @@ export default function reducer(state = initState, action) {
       };
     case types.LOAD_USER_INFO_SUCCEED:
       const {items} = action.payload;
-      console.log("reducer: received new UserInfo");
       return {
         items: {
           //...state.items,
@@ -36,7 +35,6 @@ export default function reducer(state = initState, action) {
       };
     case types.UPDATE_USERS_INFO_SUCCEED:
       const {newUsersInfo} = action.payload;
-      console.log("reducer(UPDATE_USERS_INFO_SUCCEED): received new UserInfo: newUsersInfo = ", JSON.stringify(newUsersInfo));
       state.items = newUsersInfo;
       return {
         ...state,
@@ -47,13 +45,11 @@ export default function reducer(state = initState, action) {
     case types.REMOVE_LIKED_PLACE: {
       const {placeId} = action.payload;
       let usersInfo = state.items;
-      console.log("in reducer/types.REMOVE_LIKED_PLACE: usersInfo = ", Object.getOwnPropertyNames(usersInfo));
       for (let userId in usersInfo) {
         if (usersInfo.hasOwnProperty(userId) && usersInfo[userId].hasOwnProperty("likedPlaces")) {
           delete usersInfo[userId].likedPlaces[placeId];
         }
       }
-      //console.log(usersInfo);
       return {
         items: usersInfo,
         loading: false,

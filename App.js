@@ -24,6 +24,7 @@ import usersInfo from "./app/components/UserAvatar/reducer";
 import comments from "./app/components/Comments/reducer";
 import Colors from "./app/res/colors/index";
 import PlaceMap from "./app/PlaceMap/PlaceMap";
+import AllSubscriptions from "./app/AllSubscriptions/AllSubscriptions";
 
 const reducer = combineReducers({user, places, usersInfo, comments});
 
@@ -42,6 +43,7 @@ Navigation.registerComponent('PlaceMap', () => PlaceMap, store, Provider);
 Navigation.registerComponent('Login', () => Login, store, Provider);
 Navigation.registerComponent('Promotions', () => Promotions, store, Provider);
 Navigation.registerComponent('ImageViewer', () => ImageViewer, store, Provider);
+Navigation.registerComponent('AllSubscriptions', () => AllSubscriptions, store, Provider);
 
 const startApp = () => {
   Navigation.startTabBasedApp({

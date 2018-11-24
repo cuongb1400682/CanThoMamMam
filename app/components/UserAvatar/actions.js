@@ -20,8 +20,6 @@ export const loadUserInfo = (usersRef, query) => async (dispatch, getState) => {
       payload: {items},
     });
   } catch (e) {
-    console.log('LOAD_USER_INFO_FAILED', e);
-    console.log("LOAD_USER_INFO_FAILED/getState() = ", getState());
     dispatch({
       type: types.LOAD_USER_INFO_FAILED,
       error: true,
@@ -39,7 +37,6 @@ export const updateUsersInfo = (newUsersInfo) => async (dispatch, getState) => {
       payload: {newUsersInfo},
     });
   } catch (e) {
-    console.log('UPDATE_USERS_INFO_FAILED', e);
     dispatch({
       type: types.UPDATE_USERS_INFO_FAILED,
       error: true,

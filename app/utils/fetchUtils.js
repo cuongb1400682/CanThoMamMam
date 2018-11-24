@@ -10,10 +10,8 @@ export function post(url, header, body) {
   )
     .then(response => response.json())
     .then(jsonResponse => {
-      console.log(url, jsonResponse)
       return jsonResponse
     })
     .catch(e => {
-      console.log(url, e)
     })
 }

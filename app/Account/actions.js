@@ -32,7 +32,6 @@ async function getCurrentUserInformation() {
       '/me?fields=picture.type(large),name,id',
       null,
       (error, result) => {
-        console.log('result', result);
         if (error) {
           reject(error);
         } else {
@@ -61,8 +60,6 @@ export const logOut = () => async (dispatch, getState) => {
 export const logIn = () => async (dispatch, getState) => {
   dispatch({type: types.USER_LOGIN_REQUEST});
 
-  console.log("in logIn");
-
   try {
 
     if (getState().currentUser !== null) {
@@ -87,7 +84,6 @@ export const logIn = () => async (dispatch, getState) => {
     });
 
   } catch (e) {
-    console.log('in logIn: ', e);
     dispatch({type: types.USER_LOGIN_RESPONSE, payload: e, error: true});
   }
 };

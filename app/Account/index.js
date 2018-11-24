@@ -28,7 +28,6 @@ class Account extends Component {
         try {
           await this.props.dispatch(LoginActions.logIn());
         } catch (e) {
-          console.log('onLoginButtonPress', e);
         }
         break;
     }
