@@ -108,7 +108,12 @@ export async function fetchPlaces(placesRef, query) {
         items = items.filter(item => item.user.id === query.userId);
     }
 
-    return items;
+    return items.sort((place0 = {}, place1 = {}) => {
+        const time0 = place0.created_timestamp || 0;
+        const time1 = place1.created_timestamp || 0;
+
+        return time1 - time0;
+    });
 }
 
 export async function saveChanges(place) {

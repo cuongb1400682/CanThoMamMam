@@ -16,6 +16,7 @@ import Promotions from "./app/Promotions/index";
 import icHome from './app/res/images/ic_home.png'
 import icAccount from './app/res/images/ic_account_box.png'
 import icPromotions from "./app/res/images/ic_promotions.png"
+import icMarker from "./app/res/images/ic_marker.png"
 import codePush from "react-native-code-push";
 import {composeWithDevTools} from 'remote-redux-devtools';
 import user from "./app/Account/reducer";
@@ -60,8 +61,8 @@ const startApp = () => {
       },
       {
         screen: 'PlaceMap',
-        label: 'Gần đây',
-        icon: icPromotions,
+        label: 'Xung quanh',
+        icon: icMarker,
       },
       {
         screen: 'Account',

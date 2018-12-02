@@ -32,18 +32,13 @@ class AccountDetails extends Component {
         const statistics =
             getPlacesStatistic(places.items["-1"].filter(item => item.user.id === currentUser.id));
 
-        //console.log('in AccountDetails: currentUserInfo = ');
-        //console.log(currentUserInfo);
-
         return (
             <View style={styles.container}>
                 <Header
                     style={{marginBottom: 16, marginTop: 16}}
                     userId={currentUser.id}
                 />
-
                 <Divider style={{marginBottom: 16}}/>
-
                 <InfoRow
                     icon="place"
                     title={res.I18n.t('account_details_my_added_places')}
@@ -98,8 +93,9 @@ class AccountDetails extends Component {
                     }}
                     content={`Có ${statistics.food} nơi`}/>
                 <InfoRow
-                    icon="ring-bell"
+                    icon="bell-ring"
                     title="Theo dõi"
+                    iconType="material-community"
                     onPress={() => {
                         this.props.navigator.push({screen: "AllSubscriptions"});
                     }}

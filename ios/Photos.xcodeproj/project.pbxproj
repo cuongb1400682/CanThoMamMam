@@ -31,7 +31,6 @@
 		65C2328E4B234693BC5F572E /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B6D332480BD406986DF6BAC /* FontAwesome.ttf */; };
 		6A27895FB9EE483A95B61AE1 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DB81521A8A4447DAA0BD4EC /* Zocial.ttf */; };
 		6A665792111A4B4D87057ECB /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C6BDB31E60034F39BFEB2811 /* MaterialIcons.ttf */; };
-		740D170DD54949EC9E7C9ABC /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B2449AEF6724FE9B7EBDE71 /* libRNVectorIcons.a */; };
 		770495283F184656AD764FE9 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2C55AE0526E947A59237EF2F /* Ionicons.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		A173C9C0F7114B8492923903 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D39201DF036E4FC08A4195F8 /* FontAwesome5_Regular.ttf */; };
@@ -49,6 +48,7 @@
 		CB4C695B21970AC000E5ED92 /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4C695821970A9E00E5ED92 /* libCodePush.a */; };
 		CB4C695D21970AEE00E5ED92 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4C695C21970AEE00E5ED92 /* libz.tbd */; };
 		CBC06AF4219714A4005BFF28 /* RNGooglePlacePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC06AF2219714A4005BFF28 /* RNGooglePlacePicker.m */; };
+		CBDF0BB721B0C133002036BB /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4C699821970C4800E5ED92 /* libRNVectorIcons.a */; };
 		CE534A864CB702D6609E3ECE /* libPods-PhotosTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3275D831E58336E5AF3D155C /* libPods-PhotosTests.a */; };
 		DE881E09D99F404A88A3FCD1 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 01F60A19105942FB949CDA90 /* MaterialCommunityIcons.ttf */; };
 		ECC39C3959E5B51BA4DF5FC5 /* libPods-Photos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ED426AC55424A4FF93C95402 /* libPods-Photos.a */; };
@@ -463,7 +463,7 @@
 				CB3021EA21970F0A00E4BD3B /* FBSDKShareKit.framework in Frameworks */,
 				CB3021E821970F0A00E4BD3B /* FBSDKCoreKit.framework in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				740D170DD54949EC9E7C9ABC /* libRNVectorIcons.a in Frameworks */,
+				CBDF0BB721B0C133002036BB /* libRNVectorIcons.a in Frameworks */,
 				ECC39C3959E5B51BA4DF5FC5 /* libPods-Photos.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1265,7 +1265,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		0F0FB32E66779B1C610392A0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

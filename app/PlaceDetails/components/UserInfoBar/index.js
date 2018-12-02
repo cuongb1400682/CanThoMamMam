@@ -34,6 +34,11 @@ class UserInfoBar extends React.Component {
 
     componentDidMount() {
         const {currentUser} = this.props;
+
+        if (!currentUser) {
+            return;
+        }
+
         this.voteRef = firebase.database().ref(`promotions/${this.props.place.id}/vote`);
         this.voteRef.on('value', async snapshot => {
                 const voters = snapshot.val();
